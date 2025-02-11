@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DevSpot.Models
 {
+    [Table("JobPosting")]
     public class JobPosting
     {
         [Key]
