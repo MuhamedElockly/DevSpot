@@ -1,5 +1,6 @@
 ﻿using DevSpot.Models;
 using DevSpot.Repositories;
+using DevSpot.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -29,8 +30,13 @@ namespace DevSpot.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(JobPosting jobPosting)
+        public async Task<IActionResult> Create(JobPostingViewModel jobPostingVm)
         {
+            if (ModelState.IsValid)
+            {
+               // jobPosting.UserId = _userManager.GetUserId(User);
+               // await _repository.AddAysnc(jobPosting);
+            }
          return   RedirectToAction(nameof(Index));
         }
     }
