@@ -1,12 +1,15 @@
-﻿using DevSpot.Models;
+﻿using DevSpot.Constants;
+using DevSpot.Models;
 using DevSpot.Repositories;
 using DevSpot.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace DevSpot.Controllers
 {
+    [Authorize]
     public class JobPostingsController : Controller
     {
 
@@ -17,7 +20,7 @@ namespace DevSpot.Controllers
             _repository = repository;
             _userManager = userManager;
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var result = await _repository.GetAllAsync();
@@ -25,11 +28,13 @@ namespace DevSpot.Controllers
 
             return View(result);
         }
+        [Authorize(Roles ="Admin,Employeer")]
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin,Employeer")]
         public async Task<IActionResult> Create(JobPostingViewModel jobPostingVm)
         {
             if (ModelState.IsValid)
@@ -43,11 +48,11 @@ namespace DevSpot.Controllers
                     Location = jobPostingVm.Location,
                     UserId = _userManager.GetUserId(User)
 
-                };          
-               await _repository.AddAysnc(jobPosting);
-				return RedirectToAction(nameof(Index));
-			}
-			return View(jobPostingVm);
-		}
+                };
+                await _repository.AddAysnc(jobPosting);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(jobPostingVm);
+        }
     }
 }
