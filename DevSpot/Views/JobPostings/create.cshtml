@@ -1,7 +1,35 @@
-﻿@*
+﻿@model DevSpot.Models.JobPosting;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
+<form action="Create" method="post">
 
-<h1>Hello From Create</h1>
+	<div class="mb-3">
+		<label asp-for="Title" class="form-label"></label>
+		<input type="text" class="form-control" asp-for="Title" />
+
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="Description" class="form-label"></label>
+		<textarea type="text" class="form-control" asp-for="Description" ></textarea>
+
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="Company" class="form-label"></label>
+		<input type="text" class="form-control" asp-for="Company" />
+
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="Location" class="form-label"></label>
+		<input type="text" class="form-control" asp-for="Location" />
+
+	</div>
+
+	<button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
