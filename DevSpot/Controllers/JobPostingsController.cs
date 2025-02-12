@@ -34,10 +34,20 @@ namespace DevSpot.Controllers
         {
             if (ModelState.IsValid)
             {
-               // jobPosting.UserId = _userManager.GetUserId(User);
-               // await _repository.AddAysnc(jobPosting);
-            }
-         return   RedirectToAction(nameof(Index));
-        }
+
+                var jobPosting = new JobPosting
+                {
+                    Title = jobPostingVm.Title,
+                    Description = jobPostingVm.Description,
+                    Company = jobPostingVm.Company,
+                    Location = jobPostingVm.Location,
+                    UserId = _userManager.GetUserId(User)
+
+                };          
+               await _repository.AddAysnc(jobPosting);
+				return RedirectToAction(nameof(Index));
+			}
+			return View(jobPostingVm);
+		}
     }
 }
