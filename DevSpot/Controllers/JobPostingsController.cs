@@ -24,11 +24,16 @@ namespace DevSpot.Controllers
         public async Task<IActionResult> Index()
         {
             var result = await _repository.GetAllAsync();
+            if (User.IsInRole(Roles.Employeer))
+            {
+                var userId = _userManager.GetUserId(User);
+                var filterdJobPosting = result.Where(jb => jb.UserId == userId);
 
-
+                return View(filterdJobPosting);
+            }
             return View(result);
         }
-        [Authorize(Roles ="Admin,Employeer")]
+        [Authorize(Roles = "Admin,Employeer")]
         public IActionResult Create()
         {
             return View();
@@ -61,14 +66,14 @@ namespace DevSpot.Controllers
         [Authorize(Roles = "Admin,Employeer")]
         public async Task<IActionResult> Delete(int id)
         {
-        
-            var jobPosting=await _repository.GetByIdAsync(id);
+
+            var jobPosting = await _repository.GetByIdAsync(id);
             if (jobPosting == null)
             {
                 return NotFound();
             }
             var userId = _userManager.GetUserId(User);
-            if(User.IsInRole(Roles.Admin)==false && userId!=jobPosting.UserId)
+            if (User.IsInRole(Roles.Admin) == false && userId != jobPosting.UserId)
             {
                 return Forbid();
             }
