@@ -33,6 +33,9 @@ namespace DevSpot.Controllers
         {
             return View();
         }
+
+
+
         [HttpPost]
         [Authorize(Roles = "Admin,Employeer")]
         public async Task<IActionResult> Create(JobPostingViewModel jobPostingVm)
@@ -53,6 +56,24 @@ namespace DevSpot.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(jobPostingVm);
+        }
+        [HttpDelete]
+        [Authorize(Roles = "Admin,Employeer")]
+        public async Task<IActionResult> Delete(int id)
+        {
+        
+            var jobPosting=await _repository.GetByIdAsync(id);
+            if (jobPosting == null)
+            {
+                return NotFound();
+            }
+            var userId = _userManager.GetUserId(User);
+            if(User.IsInRole(Roles.Admin)==false && userId!=jobPosting.UserId)
+            {
+                return Forbid();
+            }
+            await _repository.DeleteAsync(id);
+            return Ok();
         }
     }
 }
